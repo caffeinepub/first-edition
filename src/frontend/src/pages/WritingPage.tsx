@@ -14,7 +14,7 @@ import AutosaveIndicator from '../components/AutosaveIndicator';
 const MAX_WORD_COUNT = 2000;
 
 export default function WritingPage() {
-  const { project, updateStoryText, updateTitle, saveProject } = useProject();
+  const { project, updateStoryText, updateTitle, saveProjectWithText } = useProject();
   
   // Local state for textarea to prevent flickering
   const [localStoryText, setLocalStoryText] = useState(project.storyText);
@@ -23,20 +23,28 @@ export default function WritingPage() {
   // Word count based on local state for real-time updates
   const wordCount = useWordCount(localStoryText);
 
-  // Autosave status for visual feedback
-  const autosaveStatus = useAutosave(localStoryText, {
-    delay: 10000, // 10 seconds
-    onSave: saveProject,
+  // Autosave with progress tracking - 0.5 seconds
+  const { status: autosaveStatus, progress: autosaveProgress } = useAutosave(localStoryText, {
+    delay: 500,
+    onSave: (currentText: string) => {
+      console.log('Autosave callback triggered with text:', currentText.substring(0, 50) + '...');
+      saveProjectWithText(currentText);
+    },
   });
 
   // Sync local state with context when context changes from external sources
-  // (e.g., when loading from localStorage or flipbook)
   useEffect(() => {
-    setLocalStoryText(project.storyText);
+    if (project.storyText !== localStoryText) {
+      console.log('Syncing local story text with context');
+      setLocalStoryText(project.storyText);
+    }
   }, [project.storyText]);
 
   useEffect(() => {
-    setLocalTitle(project.title);
+    if (project.title !== localTitle) {
+      console.log('Syncing local title with context');
+      setLocalTitle(project.title);
+    }
   }, [project.title]);
 
   const handleStoryTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -46,10 +54,9 @@ export default function WritingPage() {
     const trimmedText = newText.trim();
     const newWordCount = trimmedText ? trimmedText.split(/\s+/).length : 0;
     
-    // Allow updates if:
-    // 1. We're below the limit, OR
-    // 2. We're at/above the limit but the new text is shorter (deleting)
+    // Allow updates if below limit or deleting
     if (newWordCount <= MAX_WORD_COUNT || newText.length < localStoryText.length) {
+      console.log('Story text changed, updating local state');
       setLocalStoryText(newText);
       updateStoryText(newText);
     }
@@ -63,39 +70,30 @@ export default function WritingPage() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 space-y-4">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-2xl font-story">Write Your Story</CardTitle>
-              <div className="flex items-center gap-2">
-                <img
-                  src="/assets/generated/pencil-mascot.dim_256x256.png"
-                  alt="Writing mascot"
-                  className="w-12 h-12"
-                />
-              </div>
-            </div>
+      <div className="lg:col-span-2 space-y-6">
+        <Card className="shadow-elegant border-primary/20">
+          <CardHeader className="border-b border-border bg-gradient-to-r from-primary/10 to-destructive/10">
+            <CardTitle className="text-2xl font-elegant text-primary">Document Editor</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-6">
             <div className="space-y-2">
-              <Label htmlFor="title">Story Title</Label>
+              <Label htmlFor="title" className="text-sm font-medium text-primary">Title</Label>
               <Input
                 id="title"
                 value={localTitle}
                 onChange={handleTitleChange}
-                placeholder="My Amazing Adventure"
-                className="text-lg font-semibold"
+                placeholder="Enter document title"
+                className="text-base font-elegant border-primary/30 focus:border-primary"
               />
             </div>
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="story">Your Story</Label>
+                <Label htmlFor="story" className="text-sm font-medium text-primary">Content</Label>
                 <div className="flex items-center gap-4">
-                  <AutosaveIndicator status={autosaveStatus} />
-                  <span className="text-sm text-muted-foreground">
-                    {wordCount} / {MAX_WORD_COUNT} {wordCount === 1 ? 'word' : 'words'}
+                  <AutosaveIndicator status={autosaveStatus} progress={autosaveProgress} />
+                  <span className="text-xs text-muted-foreground font-medium">
+                    {wordCount} / {MAX_WORD_COUNT} words
                   </span>
                 </div>
               </div>
@@ -103,12 +101,12 @@ export default function WritingPage() {
                 id="story"
                 value={localStoryText}
                 onChange={handleStoryTextChange}
-                placeholder="Once upon a time..."
-                className="min-h-[500px] text-base leading-relaxed font-writing"
+                placeholder="Start writing..."
+                className="min-h-[500px] text-base leading-relaxed font-content resize-none border-primary/30 focus:border-primary"
               />
               {wordCount >= MAX_WORD_COUNT && (
-                <p className="text-sm text-warning">
-                  You've reached the {MAX_WORD_COUNT} word limit. Delete some text to continue writing.
+                <p className="text-xs text-warning font-medium">
+                  Word limit reached. Delete text to continue editing.
                 </p>
               )}
             </div>
@@ -116,12 +114,10 @@ export default function WritingPage() {
         </Card>
       </div>
 
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
-          <DictionaryTool />
-          <ThesaurusTool />
-          <GoogleSearchTool />
-        </div>
+      <div className="space-y-6">
+        <DictionaryTool />
+        <ThesaurusTool />
+        <GoogleSearchTool />
       </div>
     </div>
   );

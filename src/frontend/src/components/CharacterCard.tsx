@@ -1,85 +1,69 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Edit, Trash2, User } from 'lucide-react';
 import type { Character } from '../backend';
-import { useDeleteCharacter } from '../hooks/useQueries';
-import { toast } from 'sonner';
 
 interface CharacterCardProps {
   character: Character;
   onEdit: (character: Character) => void;
+  onDelete: (name: string) => void;
 }
 
-export default function CharacterCard({ character, onEdit }: CharacterCardProps) {
-  const deleteCharacter = useDeleteCharacter();
-
-  const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete ${character.name}?`)) {
-      deleteCharacter.mutate(character.name, {
-        onSuccess: () => {
-          toast.success('Character deleted!');
-        },
-      });
-    }
-  };
-
+export default function CharacterCard({ character, onEdit, onDelete }: CharacterCardProps) {
   return (
-    <Card
-      className="relative overflow-hidden"
-      style={{
-        backgroundImage: 'url(/assets/generated/character-card-template.dim_350x450.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
-    >
-      <div className="absolute inset-0 bg-background/90 backdrop-blur-sm" />
-      <CardHeader className="relative">
+    <Card className="shadow-elegant border-primary/20 hover:shadow-xl transition-shadow bg-gradient-to-br from-card to-accent/20">
+      <CardHeader className="border-b border-border pb-4">
         <div className="flex items-start justify-between">
-          <CardTitle className="text-xl font-story">{character.name}</CardTitle>
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center border-2 border-primary/30">
+              <User className="w-6 h-6 text-primary" />
+            </div>
+            <CardTitle className="text-xl font-elegant text-primary">{character.name}</CardTitle>
+          </div>
           <div className="flex gap-1">
             <Button
-              size="icon"
               variant="ghost"
+              size="icon"
               onClick={() => onEdit(character)}
-              className="h-8 w-8"
+              className="h-8 w-8 text-primary hover:bg-primary/10"
             >
               <Edit className="w-4 h-4" />
             </Button>
             <Button
-              size="icon"
               variant="ghost"
-              onClick={handleDelete}
-              className="h-8 w-8 text-destructive hover:text-destructive"
+              size="icon"
+              onClick={() => onDelete(character.name)}
+              className="h-8 w-8 text-destructive hover:bg-destructive/10"
             >
               <Trash2 className="w-4 h-4" />
             </Button>
           </div>
         </div>
       </CardHeader>
-      <CardContent className="relative space-y-4">
-        <p className="text-sm leading-relaxed">{character.description}</p>
-
+      <CardContent className="pt-4 space-y-4">
+        <p className="text-sm text-muted-foreground leading-relaxed">{character.description}</p>
+        
         {character.traits.length > 0 && (
-          <div>
-            <h4 className="text-xs font-semibold text-muted-foreground mb-2">Traits</h4>
-            <div className="flex flex-wrap gap-2">
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-primary uppercase tracking-wide">Traits</h4>
+            <div className="flex flex-wrap gap-1.5">
               {character.traits.map((trait, idx) => (
-                <Badge key={idx} variant="secondary">
+                <Badge key={idx} variant="secondary" className="text-xs bg-primary/10 text-primary border-primary/30">
                   {trait}
                 </Badge>
               ))}
             </div>
           </div>
         )}
-
+        
         {character.relationships.length > 0 && (
-          <div>
-            <h4 className="text-xs font-semibold text-muted-foreground mb-2">Relationships</h4>
+          <div className="space-y-2">
+            <h4 className="text-xs font-semibold text-primary uppercase tracking-wide">Relationships</h4>
             <div className="space-y-1">
               {character.relationships.map((rel, idx) => (
-                <p key={idx} className="text-xs">
-                  {rel}
+                <p key={idx} className="text-xs text-muted-foreground leading-relaxed">
+                  • {rel}
                 </p>
               ))}
             </div>

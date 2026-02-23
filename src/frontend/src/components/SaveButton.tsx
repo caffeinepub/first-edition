@@ -8,8 +8,8 @@ export default function SaveButton() {
 
   const handleSave = () => {
     saveProject();
-    toast.success('Progress saved!', {
-      description: 'Your story has been saved to your browser.',
+    toast.success('Progress saved', {
+      description: 'Your work has been saved successfully.',
     });
   };
 

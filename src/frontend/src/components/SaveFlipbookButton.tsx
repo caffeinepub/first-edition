@@ -1,59 +1,55 @@
+import { useState } from 'react';
 import { BookOpen, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useProject } from '../contexts/ProjectContext';
 import { toast } from 'sonner';
-import { useState } from 'react';
 import { useNavigate } from '@tanstack/react-router';
 
 export default function SaveFlipbookButton() {
   const { project, saveFlipbook } = useProject();
-  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const isDisabled = !project.title.trim() || !project.storyText.trim();
-
-  const handleSave = () => {
-    setIsSaving(true);
-    
-    try {
-      saveFlipbook();
-      toast.success('Flipbook saved successfully!', {
-        description: 'Your story has been saved as an interactive flipbook.',
+  const handleSaveFlipbook = async () => {
+    if (!project.storyText.trim()) {
+      toast.error('Cannot save flipbook', {
+        description: 'Please write some content first.',
       });
-      
-      // Navigate to flipbook page after a short delay
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await saveFlipbook();
+      toast.success('Flipbook saved', {
+        description: 'Your flipbook is ready to view.',
+      });
       setTimeout(() => {
         navigate({ to: '/flipbook' });
-        setIsSaving(false);
       }, 500);
     } catch (error) {
       toast.error('Failed to save flipbook', {
         description: 'Please try again.',
       });
-      setIsSaving(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <Button
-      onClick={handleSave}
-      disabled={isDisabled || isSaving}
-      variant="default"
+      onClick={handleSaveFlipbook}
       size="sm"
+      variant="secondary"
       className="gap-2"
+      disabled={isLoading}
     >
-      {isSaving ? (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Saving...
-        </>
+      {isLoading ? (
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
-        <>
-          <BookOpen className="w-4 h-4" />
-          <span className="hidden sm:inline">Save as Flipbook</span>
-          <span className="sm:hidden">Flipbook</span>
-        </>
+        <BookOpen className="w-4 h-4" />
       )}
+      <span className="hidden sm:inline">Flipbook</span>
     </Button>
   );
 }

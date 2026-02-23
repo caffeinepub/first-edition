@@ -34,6 +34,7 @@ interface ProjectContextType {
   addImage: (image: ProjectImage) => void;
   removeImage: (id: string) => void;
   saveProject: () => void;
+  saveProjectWithText: (text: string) => void;
   clearProject: () => void;
   saveFlipbook: () => void;
   getFlipbook: () => FlipbookData | null;
@@ -54,12 +55,12 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   const [project, setProject] = useState<ProjectData>(defaultProject);
   const [hasFlipbook, setHasFlipbook] = useState(false);
   const isInitialMount = useRef(true);
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load saved project and flipbook data on mount
   useEffect(() => {
     const saved = getItem<ProjectData>('first-edition-project');
     if (saved) {
+      console.log('Loading saved project from localStorage:', saved);
       setProject(saved);
     }
     
@@ -68,32 +69,6 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     
     isInitialMount.current = false;
   }, [getItem]);
-
-  // Auto-save project data with debounce to prevent excessive writes
-  useEffect(() => {
-    // Skip the initial mount
-    if (isInitialMount.current) {
-      return;
-    }
-
-    // Clear existing timeout
-    if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current);
-    }
-
-    // Debounce auto-save by 500ms
-    autoSaveTimeoutRef.current = setTimeout(() => {
-      if (project.storyText || project.title !== defaultProject.title) {
-        setItem('first-edition-project', project);
-      }
-    }, 500);
-
-    return () => {
-      if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
-      }
-    };
-  }, [project, setItem]);
 
   const updateStoryText = (text: string) => {
     setProject((prev) => ({ ...prev, storyText: text }));
@@ -119,6 +94,18 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
 
   const saveProject = () => {
     const updatedProject = { ...project, lastSaved: Date.now() };
+    console.log('Saving project to localStorage:', updatedProject);
+    setProject(updatedProject);
+    setItem('first-edition-project', updatedProject);
+  };
+
+  const saveProjectWithText = (text: string) => {
+    const updatedProject = { 
+      ...project, 
+      storyText: text,
+      lastSaved: Date.now() 
+    };
+    console.log('Saving project with text to localStorage:', updatedProject);
     setProject(updatedProject);
     setItem('first-edition-project', updatedProject);
   };
@@ -188,6 +175,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
         addImage,
         removeImage,
         saveProject,
+        saveProjectWithText,
         clearProject,
         saveFlipbook,
         getFlipbook,

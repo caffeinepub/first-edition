@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Implement autosave functionality to automatically save story text every 10 seconds while typing.
+**Goal:** Update the application's visual design to use calligraphic fonts and a blue, red, and white color scheme.
 
 **Planned changes:**
-- Add automatic saving of story text to localStorage every 10 seconds during active typing
-- Include visual feedback (indicator or toast notification) to show when autosave completes
-- Ensure autosave does not interfere with manual save operations or cause performance issues
+- Replace current typography with calligraphic/script-style fonts for headings and decorative elements
+- Update CSS color variables from professional neutral palette to blue, red, and white using OKLCH format
+- Apply new color scheme consistently across all pages and components
 
-**User-visible outcome:** Students can type their stories without worrying about losing work, as their text automatically saves every 10 seconds with a brief "Saved" indicator appearing to confirm the save.
+**User-visible outcome:** The application displays with elegant calligraphic typography and a patriotic blue, red, and white color palette throughout all pages.

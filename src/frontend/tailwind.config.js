@@ -15,6 +15,12 @@ export default {
             }
         },
         extend: {
+            fontFamily: {
+                calligraphic: ['Dancing Script', 'cursive'],
+                elegant: ['Playfair Display', 'serif'],
+                signature: ['Great Vibes', 'cursive'],
+                sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
+            },
             colors: {
                 border: 'oklch(var(--border))',
                 input: 'oklch(var(--input))',
@@ -32,6 +38,14 @@ export default {
                 destructive: {
                     DEFAULT: 'oklch(var(--destructive) / <alpha-value>)',
                     foreground: 'oklch(var(--destructive-foreground))'
+                },
+                success: {
+                    DEFAULT: 'oklch(var(--success) / <alpha-value>)',
+                    foreground: 'oklch(var(--primary-foreground))'
+                },
+                warning: {
+                    DEFAULT: 'oklch(var(--warning) / <alpha-value>)',
+                    foreground: 'oklch(var(--foreground))'
                 },
                 muted: {
                     DEFAULT: 'oklch(var(--muted) / <alpha-value>)',
@@ -73,7 +87,9 @@ export default {
                 sm: 'calc(var(--radius) - 4px)'
             },
             boxShadow: {
-                xs: '0 1px 2px 0 rgba(0,0,0,0.05)'
+                xs: '0 1px 2px 0 rgba(0,0,0,0.05)',
+                professional: '0 2px 8px rgba(0,0,0,0.08)',
+                elegant: '0 4px 12px rgba(37, 99, 235, 0.15)'
             },
             keyframes: {
                 'accordion-down': {

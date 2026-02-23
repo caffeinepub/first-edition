@@ -1,55 +1,45 @@
 import { Link, useRouterState } from '@tanstack/react-router';
-import { BookOpen, Lightbulb, Users, Eye, CheckCircle, Sparkles, Image, Info, Book } from 'lucide-react';
-import ThemeToggle from './ThemeToggle';
 import SaveButton from './SaveButton';
 import ExportPdfButton from './ExportPdfButton';
-import SaveFlipbookButton from './SaveFlipbookButton';
-import { cn } from '@/lib/utils';
+import ThemeToggle from './ThemeToggle';
 
 export default function Navigation() {
   const router = useRouterState();
   const currentPath = router.location.pathname;
 
   const navItems = [
-    { path: '/', label: 'Write', icon: BookOpen },
-    { path: '/about', label: 'About', icon: Info },
-    { path: '/writing-prompts', label: 'Prompts', icon: Lightbulb },
-    { path: '/character-development', label: 'Characters', icon: Users },
-    { path: '/image-creation', label: 'Images', icon: Image },
-    { path: '/preview', label: 'Preview', icon: Eye },
-    { path: '/grammar-check', label: 'Grammar', icon: CheckCircle },
-    { path: '/writers-block', label: "Writer's Block", icon: Sparkles },
-    { path: '/flipbook', label: 'Flipbook', icon: Book },
+    { path: '/', label: 'About' },
+    { path: '/write', label: 'Write' },
+    { path: '/prompts', label: 'Prompts' },
+    { path: '/characters', label: 'Characters' },
+    { path: '/preview', label: 'Preview' },
+    { path: '/grammar', label: 'Grammar' },
+    { path: '/writers-block', label: 'Inspiration' },
+    { path: '/images', label: 'Images' },
+    { path: '/flipbook', label: 'Flipbook' },
   ];
 
   return (
-    <nav className="bg-sidebar border-b border-sidebar-border sticky top-[73px] z-40">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 overflow-x-auto py-2 flex-1">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentPath === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={cn(
-                    'flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
-                    isActive
-                      ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                      : 'text-sidebar-foreground hover:bg-sidebar-accent/50'
-                  )}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="hidden sm:inline">{item.label}</span>
-                </Link>
-              );
-            })}
+    <nav className="border-b border-border bg-card/50 backdrop-blur-sm">
+      <div className="container mx-auto px-6">
+        <div className="flex items-center justify-between py-3">
+          <div className="flex items-center gap-1 flex-wrap">
+            {navItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                  currentPath === item.path
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'text-foreground hover:bg-accent hover:text-accent-foreground'
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
-          <div className="flex items-center gap-2 ml-4">
+          <div className="flex items-center gap-2">
             <SaveButton />
-            <SaveFlipbookButton />
             <ExportPdfButton />
             <ThemeToggle />
           </div>

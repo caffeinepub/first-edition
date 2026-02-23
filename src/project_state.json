@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 21,
+  "projectStateVersion": 31,
   "summary": "First Edition: A novella writing website for grade 4 students with story-themed design, featuring multiple tabs (About, Writing Prompts, Image Creation, Character Development, Preview, Grammar Check, Writer's Block), word count, dark mode, save/load progress, PDF export, dictionary, thesaurus, and AI-powered writing suggestions",
   "architectural_notes": [
     "Target audience: Grade 4 students (ages 9-10)",
@@ -15,7 +15,9 @@
     "Live version still enforcing 9-word limit despite code fixes (deployment sync issue)",
     "Saved files cannot be reopened and edited in subsequent browser sessions",
     "After saving a file, text input flickers and word count does not increase when attempting to continue writing",
-    "Entered text is not being saved automatically - autosave functionality needed"
+    "Text does not persist after clicking save button",
+    "Autosave functionality is not triggering every 10 seconds as expected",
+    "Text is not saving to localStorage after clicking save button (reported as still not working)"
   ],
   "isFixRequest": true,
   "existing_features": [
@@ -258,6 +260,134 @@
         "REQ-31"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-the-localstorage-save-functionality-in-projectcontext-to-correctly-persist-the-storytext-when-the-save-button-is-clicked-ensuring-the-text-remains-stored-and-accessible-after-page-reload",
+      "title": "Fix the localStorage save functionality in ProjectContext to correctly persist the storyText when the save button is clicked, ensuring the text remains stored and accessible after page reload",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-autosave-functionality-in-the-useautosave-hook-and-projectcontext-to-correctly-trigger-every-10-seconds-while-the-user-is-typing-in-the-writingpage-textarea",
+      "title": "Fix the autosave functionality in the useAutosave hook and ProjectContext to correctly trigger every 10 seconds while the user is typing in the WritingPage textarea",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-autosaveindicator-component-with-a-progress-bar-that-visually-displays-autosave-progress-showing-filling-loading-animation-during-the-10-second-countdown-and-completion-state-when-saved",
+      "title": "Replace the AutosaveIndicator component with a progress bar that visually displays autosave progress, showing filling/loading animation during the 10-second countdown and completion state when saved",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-projectcontext-saveproject-function-to-correctly-persist-the-storytext-field-to-localstorage-under-the-project-key-ensuring-the-text-remains-stored-and-can-be-retrieved-after-page-reload",
+      "title": "Fix the ProjectContext saveProject function to correctly persist the storyText field to localStorage under the 'project' key, ensuring the text remains stored and can be retrieved after page reload",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-useautosave-hook-to-correctly-trigger-the-save-callback-every-10-seconds-after-the-user-stops-typing-in-the-writingpage-textarea-ensuring-the-debounce-logic-and-timer-are-functioning-properly",
+      "title": "Fix the useAutosave hook to correctly trigger the save callback every 10 seconds after the user stops typing in the WritingPage textarea, ensuring the debounce logic and timer are functioning properly",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-verify-the-autosaveindicator-progress-bar-component-correctly-displays-the-autosave-countdown-animation-from-0-to-100-over-10-seconds-shows-the-saving-spinner-during-save-operation-and-displays-the-saved-checkmark-after-completion",
+      "title": "Verify the AutosaveIndicator progress bar component correctly displays the autosave countdown animation from 0% to 100% over 10 seconds, shows the saving spinner during save operation, and displays the saved checkmark after completion",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-debug-the-integration-between-writingpage-useautosave-hook-projectcontext-and-autosaveindicator-to-identify-and-resolve-any-state-synchronization-issues-preventing-autosave-from-triggering-and-progress-bar-from-displaying",
+      "title": "Debug the integration between WritingPage, useAutosave hook, ProjectContext, and AutosaveIndicator to identify and resolve any state synchronization issues preventing autosave from triggering and progress bar from displaying",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-useautosave-hook-to-change-the-autosave-delay-from-10-seconds-to-2-seconds-2000ms-ensuring-the-debounced-save-callback-triggers-2-seconds-after-the-user-stops-typing",
+      "title": "Modify the useAutosave hook to change the autosave delay from 10 seconds to 2 seconds (2000ms), ensuring the debounced save callback triggers 2 seconds after the user stops typing",
+      "reqIds": [
+        "REQ-39"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-autosaveindicator-component-to-display-the-text-saving-during-the-save-operation-when-status-is-saving-replacing-or-accompanying-the-current-spinner-visual-feedback",
+      "title": "Update the AutosaveIndicator component to display the text 'Saving...' during the save operation (when status is 'saving'), replacing or accompanying the current spinner visual feedback",
+      "reqIds": [
+        "REQ-40"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-modify-the-useautosave-hook-to-change-the-autosave-delay-from-2-seconds-to-0-5-seconds-500ms-ensuring-the-debounced-save-callback-triggers-0-5-seconds-after-the-user-stops-typing-in-the-writingpage-textarea",
+      "title": "Modify the useAutosave hook to change the autosave delay from 2 seconds to 0.5 seconds (500ms), ensuring the debounced save callback triggers 0.5 seconds after the user stops typing in the WritingPage textarea",
+      "reqIds": [
+        "REQ-41"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-autosaveindicator-component-to-adjust-the-progress-bar-animation-duration-to-match-the-new-0-5-second-autosave-delay-ensuring-the-countdown-animation-completes-in-500ms",
+      "title": "Update the AutosaveIndicator component to adjust the progress bar animation duration to match the new 0.5 second autosave delay, ensuring the countdown animation completes in 500ms",
+      "reqIds": [
+        "REQ-42"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-redesign-the-entire-application-ui-from-the-current-story-themed-child-friendly-aesthetic-to-a-clean-professional-design-suitable-for-general-audiences-updating-colors-typography-layout-spacing-and-visual-elements-across-all-pages-and-components",
+      "title": "Redesign the entire application UI from the current story-themed, child-friendly aesthetic to a clean, professional design suitable for general audiences, updating colors, typography, layout spacing, and visual elements across all pages and components",
+      "reqIds": [
+        "REQ-43"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-css-variables-in-frontend-index-css-to-replace-the-current-color-scheme-with-a-professional-sophisticated-palette-using-neutral-tones-removing-child-friendly-warm-colors",
+      "title": "Update the CSS variables in frontend/index.css to replace the current color scheme with a professional, sophisticated palette using neutral tones, removing child-friendly warm colors",
+      "reqIds": [
+        "REQ-44"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-remove-or-replace-story-themed-background-images-and-decorative-assets-such-as-character-card-template-background-with-clean-professional-design-elements-or-solid-colors",
+      "title": "Remove or replace story-themed background images and decorative assets (such as character-card-template background) with clean, professional design elements or solid colors",
+      "reqIds": [
+        "REQ-45"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-professional-neutral-color-scheme-in-frontend-index-css-css-variables-with-a-blue-red-and-white-color-palette-using-oklch-color-format",
+      "title": "Replace the current professional neutral color scheme in frontend/index.css CSS variables with a blue, red, and white color palette using OKLCH color format",
+      "reqIds": [
+        "REQ-47"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-all-component-styles-across-the-application-to-reflect-the-new-blue-red-and-white-color-scheme-ensuring-consistent-visual-theme-on-all-pages-aboutpage-writingpage-characterdevelopmentpage-previewpage-grammarcheckpage-writersblockpage-imagecreationpage-writingpromptspage-flipbookpage",
+      "title": "Update all component styles across the application to reflect the new blue, red, and white color scheme, ensuring consistent visual theme on all pages (AboutPage, WritingPage, CharacterDevelopmentPage, PreviewPage, GrammarCheckPage, WritersBlockPage, ImageCreationPage, WritingPromptsPage, FlipbookPage)",
+      "reqIds": [
+        "REQ-48"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -369,6 +499,44 @@
       "id": "AR-19",
       "summary": "Implement autosave functionality that saves entered text to localStorage every 10 seconds while typing",
       "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Reduce autosave interval from 10 seconds to 2 seconds",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Display 'Saving...' message during autosave operation",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Reduce autosave interval from 2 seconds to 0.5 seconds",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Redesign the webpage UI to a more professional aesthetic (moving away from story-themed/child-friendly design)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Apply calligraphic fonts and update color scheme to blue, red, and white",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Update the global CSS typography in frontend/index.css to use calligraphic or script-style fonts for headings and decorative text elements throughout the application",
+      "reqIds": [
+        "REQ-46"
+      ],
       "status": "pending"
     }
   ],

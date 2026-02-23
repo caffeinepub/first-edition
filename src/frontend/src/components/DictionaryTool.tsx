@@ -1,77 +1,67 @@
 import { useState } from 'react';
-import { Search, BookOpen } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDictionary } from '../hooks/useDictionary';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { BookOpen, Search } from 'lucide-react';
 
 export default function DictionaryTool() {
-  const [searchWord, setSearchWord] = useState('');
-  const [result, setResult] = useState<any>(null);
+  const [word, setWord] = useState('');
+  const [definition, setDefinition] = useState<string | null>(null);
   const { lookupWord, isLoading, error } = useDictionary();
 
   const handleSearch = async () => {
-    const data = await lookupWord(searchWord);
-    setResult(data);
+    if (word.trim()) {
+      const result = await lookupWord(word.trim().toLowerCase());
+      if (result && result.meanings && result.meanings.length > 0) {
+        const firstDefinition = result.meanings[0].definitions[0]?.definition || 'No definition available';
+        setDefinition(firstDefinition);
+      } else {
+        setDefinition(null);
+      }
+    }
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-lg">
+    <Card className="shadow-elegant border-primary/20">
+      <CardHeader className="border-b border-border bg-gradient-to-r from-primary/10 to-destructive/10">
+        <CardTitle className="text-lg font-elegant text-primary flex items-center gap-2">
           <BookOpen className="w-5 h-5" />
           Dictionary
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="pt-4 space-y-3">
         <div className="flex gap-2">
           <Input
-            placeholder="Look up a word..."
-            value={searchWord}
-            onChange={(e) => setSearchWord(e.target.value)}
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            placeholder="Enter a word..."
+            className="text-sm border-primary/30 focus:border-primary"
           />
-          <Button onClick={handleSearch} disabled={isLoading || !searchWord.trim()}>
+          <Button
+            onClick={handleSearch}
+            disabled={isLoading || !word.trim()}
+            size="icon"
+            className="flex-shrink-0 bg-primary hover:bg-primary/90"
+          >
             <Search className="w-4 h-4" />
           </Button>
         </div>
 
-        {error && (
-          <p className="text-sm text-destructive">
-            Word not found. Try a different word!
-          </p>
+        {isLoading && (
+          <p className="text-xs text-muted-foreground">Loading definition...</p>
         )}
 
-        {result && (
-          <ScrollArea className="h-[300px]">
-            <div className="space-y-3">
-              <div>
-                <h3 className="font-bold text-lg">{result.word}</h3>
-                {result.phonetic && (
-                  <p className="text-sm text-muted-foreground">{result.phonetic}</p>
-                )}
-              </div>
+        {error && (
+          <p className="text-xs text-destructive">Definition not found</p>
+        )}
 
-              {result.meanings?.map((meaning: any, idx: number) => (
-                <div key={idx} className="space-y-2">
-                  <p className="font-semibold text-sm text-primary">
-                    {meaning.partOfSpeech}
-                  </p>
-                  {meaning.definitions?.slice(0, 2).map((def: any, defIdx: number) => (
-                    <div key={defIdx} className="pl-4 space-y-1">
-                      <p className="text-sm">{def.definition}</p>
-                      {def.example && (
-                        <p className="text-xs text-muted-foreground italic">
-                          Example: {def.example}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
+        {definition && (
+          <div className="space-y-2 text-sm">
+            <p className="font-semibold text-primary capitalize">{word}</p>
+            <p className="text-muted-foreground leading-relaxed">{definition}</p>
+          </div>
         )}
       </CardContent>
     </Card>

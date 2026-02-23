@@ -1,49 +1,126 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Implement autosave functionality for story text every 10 seconds",
+  "title": "Update typography to calligraphic fonts with blue, red, and white color scheme",
   "requirements": [
     {
-      "id": "REQ-30",
-      "summary": "Implement automatic saving of story text to localStorage every 10 seconds while typing",
+      "id": "REQ-46",
+      "summary": "Update global CSS typography to use calligraphic or script-style fonts for headings and decorative text elements",
       "acceptanceCriteria": [
-        "Story text is automatically saved to localStorage every 10 seconds when user is actively typing",
-        "Autosave timer resets when user types, preventing premature saves during active typing",
-        "Autosave functionality works independently of the manual save button",
-        "User can continue typing without interruption during autosave operations",
-        "Autosaved data persists across page refreshes and browser sessions"
+        "Headings (h1, h2, h3) use calligraphic or script-style fonts",
+        "Body text remains readable with appropriate font pairing",
+        "Font choices are web-safe or properly imported from Google Fonts or similar service"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useAutosave.ts",
-          "operation": "create",
-          "description": "Create a custom hook that implements debounced autosave logic using useEffect. The hook accepts a callback function, data to save, and a delay (10000ms). It uses a debounce pattern where the timer resets on each data change, only triggering the save callback after the user stops typing for 10 seconds. Returns the autosave status ('idle', 'saving', 'saved') for UI feedback."
-        },
-        {
-          "path": "frontend/src/pages/WritingPage.tsx",
+          "path": "frontend/index.css",
           "operation": "modify",
-          "description": "Integrate the useAutosave hook to automatically save storyText changes. Import and call useAutosave with the ProjectContext's saveProject method, the current storyText value, and 10000ms delay. Store the returned autosave status in local state to pass to the autosave indicator component. Ensure the autosave logic respects the existing local state management that prevents textarea flickering and does not interfere with manual save operations."
+          "description": "Import calligraphic/script-style fonts from Google Fonts (e.g., Dancing Script, Great Vibes, or Pacifico for headings) and update the @layer base section to apply calligraphic fonts to h1, h2, h3 elements while maintaining readable body text with complementary font pairing. Update existing font utility classes to support the new typography system."
         }
       ]
     },
     {
-      "id": "REQ-31",
-      "summary": "Add visual feedback to inform users when story text has been automatically saved",
+      "id": "REQ-47",
+      "summary": "Replace current professional neutral color scheme with blue, red, and white palette using OKLCH format",
       "acceptanceCriteria": [
-        "User sees a subtle indicator (e.g., 'Saved' text or icon) when autosave completes",
-        "Feedback appears briefly and does not obstruct the writing interface",
-        "Feedback is clear enough for grade 4 students to understand"
+        "Primary colors use shades of blue",
+        "Accent colors use shades of red",
+        "Background and neutral elements use white and light tones",
+        "Color variables maintain light and dark mode compatibility",
+        "All color definitions use OKLCH format consistent with existing implementation"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/AutosaveIndicator.tsx",
-          "operation": "create",
-          "description": "Create a component that displays autosave status feedback. Accept a 'status' prop ('idle' | 'saving' | 'saved'). When status is 'saved', display a small, non-intrusive text indicator like 'Saved ✓' with a subtle fade-in animation. The indicator should automatically fade out after 2-3 seconds. Use simple, grade-4-friendly language. Style it to appear in a fixed position (e.g., near the word count) without obstructing the textarea. Use Tailwind CSS for styling with appropriate text colors from the theme."
+          "path": "frontend/index.css",
+          "operation": "modify",
+          "description": "Replace the existing OKLCH color system CSS custom properties with a blue, red, and white palette. Update --background to white/light tones, --primary to blue shades, --destructive/--accent to red shades, and --muted/--card to light neutrals. Maintain the existing CSS variable structure for light and dark modes while transitioning from the current neutral gray palette to the new color scheme. Ensure all OKLCH values maintain proper contrast ratios for accessibility."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Update the Tailwind theme color definitions to reference the new OKLCH CSS custom properties for blue, red, and white palette. Ensure sidebar colors and other extended theme colors align with the new color scheme."
+        }
+      ]
+    },
+    {
+      "id": "REQ-48",
+      "summary": "Update component styles across all pages to reflect the new blue, red, and white color scheme consistently",
+      "acceptanceCriteria": [
+        "All pages display the new color scheme consistently",
+        "Navigation and UI components use the updated colors",
+        "Text remains readable with sufficient contrast ratios",
+        "Interactive elements (buttons, links, inputs) use appropriate colors from the new palette"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Layout.tsx",
+          "operation": "modify",
+          "description": "Review the Layout component to ensure header, navigation wrapper, and footer utilize the updated CSS custom properties from the new blue, red, and white color scheme. Verify that text contrast meets accessibility standards with the new palette."
+        },
+        {
+          "path": "frontend/src/components/Navigation.tsx",
+          "operation": "modify",
+          "description": "Update Navigation component styling to use the new blue primary colors for active route highlighting and interactive states. Ensure navigation links maintain readability with proper contrast against the new background colors."
+        },
+        {
+          "path": "frontend/src/pages/AboutPage.tsx",
+          "operation": "modify",
+          "description": "Update AboutPage to reflect the new color scheme in the platform overview and feature grid. Ensure feature cards and headings display the calligraphic typography and blue/red/white palette consistently."
         },
         {
           "path": "frontend/src/pages/WritingPage.tsx",
           "operation": "modify",
-          "description": "Add the AutosaveIndicator component to the WritingPage layout. Position it near the word count display or in the header area where it's visible but not intrusive. Pass the autosave status from the useAutosave hook as a prop to the indicator component. Ensure the indicator placement works well with the existing sidebar tools and does not cause layout shifts."
+          "description": "Update WritingPage editor interface to use the new color scheme for the textarea, sidebar tools, and word count display. Ensure calligraphic headings are applied and interactive elements use the blue and red accent colors appropriately."
+        },
+        {
+          "path": "frontend/src/pages/CharacterDevelopmentPage.tsx",
+          "operation": "modify",
+          "description": "Update CharacterDevelopmentPage to display character cards with the new blue, red, and white color scheme. Ensure dialog components and action buttons reflect the updated palette."
+        },
+        {
+          "path": "frontend/src/pages/PreviewPage.tsx",
+          "operation": "modify",
+          "description": "Update PreviewPage to display the project title with calligraphic typography and ensure the story text and image grid use the new color scheme for backgrounds and borders."
+        },
+        {
+          "path": "frontend/src/pages/GrammarCheckPage.tsx",
+          "operation": "modify",
+          "description": "Update GrammarCheckPage card-based layout to use the new blue, red, and white palette for issue cards, badges, and accent colors while maintaining readability of grammar suggestions."
+        },
+        {
+          "path": "frontend/src/pages/WritersBlockPage.tsx",
+          "operation": "modify",
+          "description": "Update WritersBlockPage suggestion cards to reflect the new color scheme with blue primary colors and red accents for emphasis."
+        },
+        {
+          "path": "frontend/src/pages/ImageCreationPage.tsx",
+          "operation": "modify",
+          "description": "Update ImageCreationPage to use the new color scheme for the prompt input field and image grid display. Ensure interactive elements use appropriate blue and red accent colors."
+        },
+        {
+          "path": "frontend/src/pages/WritingPromptsPage.tsx",
+          "operation": "modify",
+          "description": "Update WritingPromptsPage category cards to display with the new blue, red, and white color scheme while maintaining clear category differentiation."
+        },
+        {
+          "path": "frontend/src/pages/FlipbookPage.tsx",
+          "operation": "modify",
+          "description": "Update FlipbookPage viewer controls and navigation buttons to use the new blue primary colors and ensure consistent color scheme application."
+        },
+        {
+          "path": "frontend/src/components/CharacterCard.tsx",
+          "operation": "modify",
+          "description": "Update CharacterCard component to use the new blue, red, and white palette for card backgrounds, borders, and action buttons. Ensure calligraphic typography is applied to character names."
+        },
+        {
+          "path": "frontend/src/components/AutosaveIndicator.tsx",
+          "operation": "modify",
+          "description": "Update AutosaveIndicator to use blue for the progress bar and success states, maintaining visibility against the new color scheme."
+        },
+        {
+          "path": "frontend/src/components/ThemeToggle.tsx",
+          "operation": "modify",
+          "description": "Verify ThemeToggle button styling works correctly with the new blue, red, and white palette in both light and dark modes."
         }
       ]
     }

@@ -3,166 +3,111 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
 import { X } from 'lucide-react';
 import type { Character } from '../backend';
-import { useAddCharacter } from '../hooks/useQueries';
-import { toast } from 'sonner';
 
 interface CharacterFormProps {
-  character?: Character | null;
-  onClose: () => void;
+  character?: Character;
+  onSubmit: (character: Character) => void;
+  onCancel: () => void;
 }
 
-export default function CharacterForm({ character, onClose }: CharacterFormProps) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [traits, setTraits] = useState<string[]>([]);
-  const [traitInput, setTraitInput] = useState('');
-  const [relationships, setRelationships] = useState<string[]>([]);
-  const [relationshipInput, setRelationshipInput] = useState('');
-
-  const addCharacter = useAddCharacter();
-
-  useEffect(() => {
-    if (character) {
-      setName(character.name);
-      setDescription(character.description);
-      setTraits(character.traits);
-      setRelationships(character.relationships);
-    }
-  }, [character]);
-
-  const handleAddTrait = () => {
-    if (traitInput.trim() && !traits.includes(traitInput.trim())) {
-      setTraits([...traits, traitInput.trim()]);
-      setTraitInput('');
-    }
-  };
-
-  const handleRemoveTrait = (trait: string) => {
-    setTraits(traits.filter((t) => t !== trait));
-  };
-
-  const handleAddRelationship = () => {
-    if (relationshipInput.trim() && !relationships.includes(relationshipInput.trim())) {
-      setRelationships([...relationships, relationshipInput.trim()]);
-      setRelationshipInput('');
-    }
-  };
-
-  const handleRemoveRelationship = (rel: string) => {
-    setRelationships(relationships.filter((r) => r !== rel));
-  };
+export default function CharacterForm({ character, onSubmit, onCancel }: CharacterFormProps) {
+  const [name, setName] = useState(character?.name || '');
+  const [description, setDescription] = useState(character?.description || '');
+  const [traits, setTraits] = useState<string[]>(character?.traits || []);
+  const [relationships, setRelationships] = useState<string[]>(character?.relationships || []);
+  const [currentTrait, setCurrentTrait] = useState('');
+  const [currentRelationship, setCurrentRelationship] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!name.trim() || !description.trim()) return;
 
-    if (!name.trim() || !description.trim()) {
-      toast.error('Please fill in name and description');
-      return;
-    }
-
-    const newCharacter: Character = {
+    onSubmit({
       name: name.trim(),
       description: description.trim(),
       traits,
       relationships,
-    };
-
-    addCharacter.mutate(newCharacter, {
-      onSuccess: () => {
-        toast.success(character ? 'Character updated!' : 'Character created!');
-        onClose();
-      },
-      onError: () => {
-        toast.error('Failed to save character');
-      },
     });
   };
 
+  const addTrait = () => {
+    if (currentTrait.trim() && !traits.includes(currentTrait.trim())) {
+      setTraits([...traits, currentTrait.trim()]);
+      setCurrentTrait('');
+    }
+  };
+
+  const removeTrait = (index: number) => {
+    setTraits(traits.filter((_, i) => i !== index));
+  };
+
+  const addRelationship = () => {
+    if (currentRelationship.trim()) {
+      setRelationships([...relationships, currentRelationship.trim()]);
+      setCurrentRelationship('');
+    }
+  };
+
+  const removeRelationship = (index: number) => {
+    setRelationships(relationships.filter((_, i) => i !== index));
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="name">Character Name *</Label>
+        <Label htmlFor="name" className="text-sm font-medium">Name</Label>
         <Input
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g., Luna the Explorer"
+          placeholder="Character name"
           required
+          className="text-sm"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description *</Label>
+        <Label htmlFor="description" className="text-sm font-medium">Description</Label>
         <Textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          placeholder="Describe your character..."
-          rows={3}
+          placeholder="Describe the character..."
           required
+          className="min-h-[100px] text-sm"
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="trait">Personality Traits</Label>
+        <Label className="text-sm font-medium">Traits</Label>
         <div className="flex gap-2">
           <Input
-            id="trait"
-            value={traitInput}
-            onChange={(e) => setTraitInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTrait())}
-            placeholder="e.g., brave, kind, funny"
+            value={currentTrait}
+            onChange={(e) => setCurrentTrait(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTrait())}
+            placeholder="Add trait..."
+            className="text-sm"
           />
-          <Button type="button" onClick={handleAddTrait} variant="secondary">
+          <Button type="button" onClick={addTrait} size="sm" variant="secondary">
             Add
           </Button>
         </div>
         {traits.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {traits.map((trait, idx) => (
-              <Badge key={idx} variant="secondary" className="gap-1">
-                {trait}
+              <div
+                key={idx}
+                className="flex items-center gap-1 bg-secondary text-secondary-foreground px-2.5 py-1 rounded-md text-xs"
+              >
+                <span>{trait}</span>
                 <button
                   type="button"
-                  onClick={() => handleRemoveTrait(trait)}
-                  className="ml-1 hover:text-destructive"
+                  onClick={() => removeTrait(idx)}
+                  className="hover:text-destructive"
                 >
                   <X className="w-3 h-3" />
-                </button>
-              </Badge>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="relationship">Relationships</Label>
-        <div className="flex gap-2">
-          <Input
-            id="relationship"
-            value={relationshipInput}
-            onChange={(e) => setRelationshipInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddRelationship())}
-            placeholder="e.g., best friend to Max"
-          />
-          <Button type="button" onClick={handleAddRelationship} variant="secondary">
-            Add
-          </Button>
-        </div>
-        {relationships.length > 0 && (
-          <div className="space-y-2 mt-2">
-            {relationships.map((rel, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-sm bg-muted p-2 rounded">
-                <span className="flex-1">{rel}</span>
-                <button
-                  type="button"
-                  onClick={() => handleRemoveRelationship(rel)}
-                  className="text-destructive hover:text-destructive/80"
-                >
-                  <X className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -170,12 +115,47 @@ export default function CharacterForm({ character, onClose }: CharacterFormProps
         )}
       </div>
 
-      <div className="flex gap-2 justify-end pt-4">
-        <Button type="button" variant="outline" onClick={onClose}>
-          Cancel
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">Relationships</Label>
+        <div className="flex gap-2">
+          <Input
+            value={currentRelationship}
+            onChange={(e) => setCurrentRelationship(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addRelationship())}
+            placeholder="Add relationship..."
+            className="text-sm"
+          />
+          <Button type="button" onClick={addRelationship} size="sm" variant="secondary">
+            Add
+          </Button>
+        </div>
+        {relationships.length > 0 && (
+          <div className="space-y-1.5 mt-2">
+            {relationships.map((rel, idx) => (
+              <div
+                key={idx}
+                className="flex items-center justify-between bg-secondary text-secondary-foreground px-3 py-2 rounded-md text-xs"
+              >
+                <span>{rel}</span>
+                <button
+                  type="button"
+                  onClick={() => removeRelationship(idx)}
+                  className="hover:text-destructive"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="flex gap-3 pt-4">
+        <Button type="submit" className="flex-1">
+          {character ? 'Update' : 'Create'}
         </Button>
-        <Button type="submit" disabled={addCharacter.isPending}>
-          {addCharacter.isPending ? 'Saving...' : character ? 'Update' : 'Create'}
+        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
+          Cancel
         </Button>
       </div>
     </form>

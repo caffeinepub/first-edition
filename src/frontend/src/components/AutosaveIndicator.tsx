@@ -1,34 +1,44 @@
-import { Check, Loader2 } from 'lucide-react';
-
-export type AutosaveStatus = 'idle' | 'saving' | 'saved';
+import { CheckCircle, Clock } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 interface AutosaveIndicatorProps {
-  status: AutosaveStatus;
+  status: 'idle' | 'pending' | 'saving' | 'saved';
+  progress: number;
 }
 
-/**
- * Component that displays autosave status feedback.
- * Shows a subtle indicator when content is being saved or has been saved.
- */
-export default function AutosaveIndicator({ status }: AutosaveIndicatorProps) {
+export default function AutosaveIndicator({ status, progress }: AutosaveIndicatorProps) {
   if (status === 'idle') {
     return null;
   }
 
-  return (
-    <div className="flex items-center gap-2 text-sm animate-in fade-in duration-200">
-      {status === 'saving' && (
-        <>
-          <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />
-          <span className="text-muted-foreground">Saving...</span>
-        </>
-      )}
-      {status === 'saved' && (
-        <>
-          <Check className="w-4 h-4 text-success" />
-          <span className="text-success font-medium">Saved ✓</span>
-        </>
-      )}
-    </div>
-  );
+  if (status === 'saved') {
+    return (
+      <div className="flex items-center gap-2 text-xs text-primary">
+        <CheckCircle className="w-4 h-4" />
+        <span className="font-medium">Saved</span>
+      </div>
+    );
+  }
+
+  if (status === 'pending') {
+    return (
+      <div className="flex items-center gap-2">
+        <div className="w-24">
+          <Progress value={progress} className="h-1.5 bg-muted" />
+        </div>
+        <span className="text-xs text-muted-foreground font-medium">Saving...</span>
+      </div>
+    );
+  }
+
+  if (status === 'saving') {
+    return (
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Clock className="w-4 h-4 animate-pulse" />
+        <span className="font-medium">Saving...</span>
+      </div>
+    );
+  }
+
+  return null;
 }

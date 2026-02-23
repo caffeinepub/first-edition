@@ -1,77 +1,90 @@
 import { useState } from 'react';
 import { useGetCharacters, useAddCharacter, useDeleteCharacter } from '../hooks/useQueries';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Plus, Users } from 'lucide-react';
-import CharacterForm from '../components/CharacterForm';
-import CharacterCard from '../components/CharacterCard';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import CharacterCard from '../components/CharacterCard';
+import CharacterForm from '../components/CharacterForm';
+import { Plus, Users } from 'lucide-react';
 import type { Character } from '../backend';
 
 export default function CharacterDevelopmentPage() {
-  const { data: characters = [], isLoading } = useGetCharacters();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingCharacter, setEditingCharacter] = useState<Character | null>(null);
+  const [editingCharacter, setEditingCharacter] = useState<Character | undefined>(undefined);
 
-  const handleEdit = (character: Character) => {
+  const { data: characters = [], isLoading } = useGetCharacters();
+  const addCharacter = useAddCharacter();
+  const deleteCharacter = useDeleteCharacter();
+
+  const handleAddCharacter = (character: Character) => {
+    addCharacter.mutate(character, {
+      onSuccess: () => {
+        setIsDialogOpen(false);
+      },
+    });
+  };
+
+  const handleEditCharacter = (character: Character) => {
     setEditingCharacter(character);
     setIsDialogOpen(true);
   };
 
+  const handleDeleteCharacter = (name: string) => {
+    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
+      deleteCharacter.mutate(name);
+    }
+  };
+
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
-    setEditingCharacter(null);
+    setEditingCharacter(undefined);
   };
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-primary font-story flex items-center gap-3">
-            <Users className="w-8 h-8" />
-            Character Development
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            Create and manage the characters in your story
-          </p>
+          <h1 className="text-4xl font-elegant text-primary mb-2">Character Development</h1>
+          <p className="text-muted-foreground">Create and manage characters for your story</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="gap-2">
+            <Button className="gap-2 bg-primary hover:bg-primary/90 shadow-md">
               <Plus className="w-4 h-4" />
               Add Character
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl border-primary/30">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-2xl font-elegant text-primary">
                 {editingCharacter ? 'Edit Character' : 'Create New Character'}
               </DialogTitle>
             </DialogHeader>
             <CharacterForm
               character={editingCharacter}
-              onClose={handleCloseDialog}
+              onSubmit={handleAddCharacter}
+              onCancel={handleCloseDialog}
             />
           </DialogContent>
         </Dialog>
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Loading characters...</p>
-        </div>
-      ) : characters.length === 0 ? (
-        <Card>
+        <Card className="shadow-elegant border-primary/20">
           <CardContent className="py-12 text-center">
-            <Users className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No characters yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Start building your story by creating your first character!
-            </p>
-            <Button onClick={() => setIsDialogOpen(true)} className="gap-2">
-              <Plus className="w-4 h-4" />
-              Create Your First Character
-            </Button>
+            <p className="text-muted-foreground">Loading characters...</p>
+          </CardContent>
+        </Card>
+      ) : characters.length === 0 ? (
+        <Card className="shadow-elegant border-primary/20 bg-gradient-to-br from-primary/5 to-destructive/5">
+          <CardContent className="py-12 text-center space-y-4">
+            <Users className="w-16 h-16 mx-auto text-primary/40" />
+            <div>
+              <h3 className="text-lg font-elegant text-primary mb-2">No Characters Yet</h3>
+              <p className="text-muted-foreground text-sm">
+                Start building your story by creating your first character
+              </p>
+            </div>
           </CardContent>
         </Card>
       ) : (
@@ -80,7 +93,8 @@ export default function CharacterDevelopmentPage() {
             <CharacterCard
               key={character.name}
               character={character}
-              onEdit={handleEdit}
+              onEdit={handleEditCharacter}
+              onDelete={handleDeleteCharacter}
             />
           ))}
         </div>

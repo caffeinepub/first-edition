@@ -1,107 +1,95 @@
 import { useState } from 'react';
-import { useProject } from '../contexts/ProjectContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Lightbulb } from 'lucide-react';
+import { Lightbulb, RefreshCw } from 'lucide-react';
+
+interface Suggestion {
+  title: string;
+  description: string;
+}
 
 export default function WritersBlockPage() {
-  const { project } = useProject();
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([
+    {
+      title: 'Change Your Setting',
+      description: 'Try writing in a different location or environment to spark new ideas.',
+    },
+    {
+      title: 'Free Writing Exercise',
+      description: 'Write continuously for 10 minutes without stopping or editing.',
+    },
+    {
+      title: 'Character Interview',
+      description: 'Interview your characters to understand their motivations better.',
+    },
+  ]);
 
-  const generateSuggestions = () => {
-    setIsGenerating(true);
+  const refreshSuggestions = () => {
+    const allSuggestions: Suggestion[] = [
+      {
+        title: 'Change Your Setting',
+        description: 'Try writing in a different location or environment to spark new ideas.',
+      },
+      {
+        title: 'Free Writing Exercise',
+        description: 'Write continuously for 10 minutes without stopping or editing.',
+      },
+      {
+        title: 'Character Interview',
+        description: 'Interview your characters to understand their motivations better.',
+      },
+      {
+        title: 'Read Similar Works',
+        description: 'Read books or stories in your genre for inspiration and technique.',
+      },
+      {
+        title: 'Take a Break',
+        description: 'Step away from your work and return with fresh perspective.',
+      },
+      {
+        title: 'Outline Your Scene',
+        description: 'Create a detailed outline of what needs to happen next.',
+      },
+    ];
 
-    // Simulate AI suggestions based on story content
-    setTimeout(() => {
-      const lastWords = project.storyText.trim().split(/\s+/).slice(-20).join(' ');
-      
-      const suggestionTemplates = [
-        'What if your character discovers something unexpected?',
-        'Try adding a new character who changes everything.',
-        'Maybe your character faces a difficult choice.',
-        'What happens when things don\'t go as planned?',
-        'Your character could meet someone from their past.',
-        'Add a surprising twist that no one sees coming.',
-        'What if the weather suddenly changes the situation?',
-        'Your character might find a clue or important object.',
-        'Try writing a conversation between two characters.',
-        'What secret might your character be hiding?',
-      ];
-
-      const randomSuggestions = suggestionTemplates
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 5);
-
-      setSuggestions(randomSuggestions);
-      setIsGenerating(false);
-    }, 1500);
+    const shuffled = [...allSuggestions].sort(() => Math.random() - 0.5);
+    setSuggestions(shuffled.slice(0, 3));
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-primary font-story flex items-center justify-center gap-3">
-          <Sparkles className="w-8 h-8" />
-          Writer's Block Helper
-        </h1>
-        <p className="text-muted-foreground">
-          Stuck? Get ideas to continue your story!
-        </p>
+        <h1 className="text-4xl font-elegant text-primary">Writer's Block Helper</h1>
+        <p className="text-muted-foreground">Get inspired and overcome creative obstacles</p>
       </div>
 
-      {!project.storyText.trim() ? (
-        <Card>
-          <CardContent className="py-12 text-center">
-            <Lightbulb className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Start writing first</h3>
-            <p className="text-muted-foreground">
-              Write at least a few sentences, then come back here for suggestions!
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Story So Far</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-muted rounded-lg max-h-[200px] overflow-y-auto">
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {project.storyText.split(/\s+/).slice(-100).join(' ')}
-                  {project.storyText.split(/\s+/).length > 100 && '...'}
-                </p>
+      <div className="flex justify-center">
+        <Button
+          onClick={refreshSuggestions}
+          className="gap-2 bg-primary hover:bg-primary/90 shadow-md"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Get New Suggestions
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {suggestions.map((suggestion, idx) => (
+          <Card key={idx} className="shadow-elegant border-primary/20 bg-gradient-to-br from-card to-accent/20 hover:shadow-xl transition-shadow">
+            <CardHeader className="border-b border-border pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center border-2 border-primary/30">
+                  <Lightbulb className="w-5 h-5 text-primary" />
+                </div>
+                <CardTitle className="text-lg font-elegant text-primary">{suggestion.title}</CardTitle>
               </div>
-              <Button onClick={generateSuggestions} disabled={isGenerating} className="w-full gap-2">
-                <Sparkles className="w-4 h-4" />
-                {isGenerating ? 'Thinking...' : 'Get Writing Ideas'}
-              </Button>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">{suggestion.description}</p>
             </CardContent>
           </Card>
-
-          {suggestions.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="w-5 h-5" />
-                  Ideas to Continue Your Story
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {suggestions.map((suggestion, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-primary/5 border border-primary/20 rounded-lg hover:bg-primary/10 transition-colors"
-                  >
-                    <p className="text-sm leading-relaxed">{suggestion}</p>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          )}
-        </>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
