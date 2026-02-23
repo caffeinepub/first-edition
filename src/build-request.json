@@ -1,0 +1,42 @@
+{
+  "kind": "build_request",
+  "title": "Set maximum word count to 2000 words",
+  "projectName": "First Edition",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-18",
+      "text": "Add a maximum word count limit of 2000 words to the main writing textarea on the WritingPage, preventing users from typing beyond this limit and displaying the count as 'X / 2000' format",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "keep the maximum word count as 2000"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The textarea on WritingPage enforces a 2000 word maximum",
+        "Users cannot type or paste text that would exceed 2000 words",
+        "The word count display shows current count out of 2000 (e.g., '1543 / 2000')",
+        "When the limit is reached, further typing is blocked",
+        "The word count indicator remains visible and updates in real-time as the user types"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not change the existing word count calculation logic in useWordCount hook",
+    "Preserve the current visual styling and layout of the WritingPage",
+    "Maintain compatibility with existing save/load functionality"
+  ],
+  "nonGoals": [
+    "Changing word count limits for other text fields (character descriptions, etc.)",
+    "Adding warning messages or alerts about approaching the limit",
+    "Modifying the PDF export or flipbook generation logic"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

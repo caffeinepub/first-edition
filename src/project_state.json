@@ -1,0 +1,240 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 7,
+  "summary": "First Edition: A novella writing website for grade 4 students with story-themed design, featuring multiple tabs (About, Writing Prompts, Image Creation, Character Development, Preview, Grammar Check, Writer's Block), word count, dark mode, save/load progress, PDF export, dictionary, thesaurus, and AI-powered writing suggestions",
+  "architectural_notes": [
+    "Target audience: Grade 4 students (ages 9-10)",
+    "Local storage for save/load progress (no backend required)",
+    "Client-side PDF generation for export",
+    "Story-themed UI design with child-friendly aesthetics",
+    "Maximum word count limit: 2000 words"
+  ],
+  "known_issues": [
+    "Email submission not available on current plan - using local save/PDF download instead"
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-create-an-about-page-that-explains-first-edition-is-a-novella-writing-platform-for-grade-4-students-describing-its-features-and-purpose-in-age-appropriate-language",
+      "title": "Create an About page that explains First Edition is a novella writing platform for grade 4 students, describing its features and purpose in age-appropriate language",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-writing-prompts-page-that-displays-creative-story-prompts-suitable-for-grade-4-students-to-inspire-their-novella-writing",
+      "title": "Create a Writing Prompts page that displays creative story prompts suitable for grade 4 students to inspire their novella writing",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-an-image-creation-tool-page-that-generates-multiple-illustrations-based-on-the-story-text-written-by-the-student-allowing-them-to-create-visuals-for-their-novella",
+      "title": "Create an Image Creation Tool page that generates multiple illustrations based on the story text written by the student, allowing them to create visuals for their novella",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-character-development-page-that-helps-students-build-and-track-their-story-characters-with-fields-for-names-descriptions-traits-and-relationships",
+      "title": "Create a Character Development page that helps students build and track their story characters with fields for names, descriptions, traits, and relationships",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-preview-page-that-displays-the-student-s-novella-in-a-formatted-reading-view-showing-text-and-selected-images-together-as-a-complete-story",
+      "title": "Create a Preview page that displays the student's novella in a formatted reading view, showing text and selected images together as a complete story",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-grammar-check-page-that-analyzes-the-student-s-writing-and-displays-grammar-corrections-with-clear-explanations-suitable-for-grade-4-comprehension",
+      "title": "Create a Grammar Check page that analyzes the student's writing and displays grammar corrections with clear explanations suitable for grade 4 comprehension",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-writer-s-block-page-that-provides-ai-generated-writing-suggestions-based-on-what-the-student-has-written-so-far-helping-them-continue-their-story-when-stuck",
+      "title": "Create a Writer's Block page that provides AI-generated writing suggestions based on what the student has written so far, helping them continue their story when stuck",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-main-writing-interface-with-a-real-time-word-count-tracker-that-updates-as-the-student-types-their-novella",
+      "title": "Implement a main writing interface with a real-time word count tracker that updates as the student types their novella",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-dark-mode-toggle-that-allows-students-to-switch-between-light-and-dark-themes-across-the-entire-application",
+      "title": "Implement dark mode toggle that allows students to switch between light and dark themes across the entire application",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-save-progress-functionality-that-stores-the-student-s-novella-text-characters-selected-images-and-all-project-data-in-browser-local-storage",
+      "title": "Implement save progress functionality that stores the student's novella text, characters, selected images, and all project data in browser local storage",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-pdf-export-functionality-that-allows-students-to-download-their-complete-novella-as-a-pdf-file-including-text-and-images-in-a-formatted-layout",
+      "title": "Implement PDF export functionality that allows students to download their complete novella as a PDF file, including text and images in a formatted layout",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-dictionary-functionality-that-allows-students-to-look-up-word-definitions-while-writing-their-novella",
+      "title": "Integrate dictionary functionality that allows students to look up word definitions while writing their novella",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-integrate-thesaurus-functionality-that-allows-students-to-find-synonyms-and-alternative-words-while-writing-their-novella",
+      "title": "Integrate thesaurus functionality that allows students to find synonyms and alternative words while writing their novella",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-design-the-entire-website-with-a-story-themed-visual-style-that-appeals-to-grade-4-children-ages-9-10-using-playful-book-inspired-elements-warm-colors-and-engaging-illustrations",
+      "title": "Design the entire website with a story-themed visual style that appeals to grade 4 children (ages 9-10), using playful, book-inspired elements, warm colors, and engaging illustrations",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reposition-the-thesaurus-synonyms-lookup-tool-to-display-next-to-the-dictionary-tool-in-the-writing-interface-sidebar-creating-a-horizontal-layout-with-both-tools-side-by-side",
+      "title": "Reposition the thesaurus/synonyms lookup tool to display next to the dictionary tool in the writing interface sidebar, creating a horizontal layout with both tools side-by-side",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-flipbook-save-feature-that-stores-the-complete-novella-title-story-text-and-selected-images-as-a-viewable-flipbook-on-the-website-accessible-through-a-dedicated-page-or-viewer-component",
+      "title": "Create a flipbook save feature that stores the complete novella (title, story text, and selected images) as a viewable flipbook on the website, accessible through a dedicated page or viewer component",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-submit-save-button-or-action-that-triggers-the-flipbook-save-functionality-replacing-or-augmenting-the-existing-pdf-export-as-the-primary-method-for-preserving-completed-novellas",
+      "title": "Add a submit/save button or action that triggers the flipbook save functionality, replacing or augmenting the existing PDF export as the primary method for preserving completed novellas",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-maximum-word-count-limit-of-2000-words-to-the-main-writing-textarea-on-the-writingpage-preventing-users-from-typing-beyond-this-limit-and-displaying-the-count-as-x-2000-format",
+      "title": "Add a maximum word count limit of 2000 words to the main writing textarea on the WritingPage, preventing users from typing beyond this limit and displaying the count as 'X / 2000' format",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create 5+ navigation tabs: About, Writing Prompts, Character Development, Preview, Grammar Check, Writer's Block",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Image generation tool that creates multiple illustrations based on story text",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Add word count tracker and dark mode toggle",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Implement save/load progress functionality (local browser storage)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Add PDF export feature for completed novels",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Integrate dictionary and thesaurus functionality",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Writer's block suggestions based on written content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Grammar checking with visible corrections display",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Story-themed design appealing to grade 4 children (ages 9-10)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Reposition thesaurus/synonyms UI next to dictionary",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Save novella as flipbook on website (replace/augment PDF export)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Set maximum word count to 2000 words",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "First Edition",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

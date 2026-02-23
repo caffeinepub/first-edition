@@ -1,0 +1,25 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Set maximum word count to 2000 words",
+  "requirements": [
+    {
+      "id": "REQ-18",
+      "summary": "Add a 2000 word maximum limit to the WritingPage textarea with real-time count display showing 'X / 2000' format",
+      "acceptanceCriteria": [
+        "The textarea on WritingPage enforces a 2000 word maximum",
+        "Users cannot type or paste text that would exceed 2000 words",
+        "The word count display shows current count out of 2000 (e.g., '1543 / 2000')",
+        "When the limit is reached, further typing is blocked",
+        "The word count indicator remains visible and updates in real-time as the user types"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/WritingPage.tsx",
+          "operation": "modify",
+          "description": "Add word count limit enforcement to the story textarea by implementing an onChange handler that blocks input when word count exceeds 2000 words. Update the word count display element to show the format 'X / 2000' instead of just the current count. Ensure paste events are also validated against the 2000 word maximum."
+        }
+      ]
+    }
+  ]
+}
