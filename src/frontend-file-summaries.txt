@@ -9,14 +9,14 @@
   "frontend/src/components/ThesaurusTool.tsx": "Thesaurus tool that finds synonyms for words using a dictionary API.",
   "frontend/src/components/CharacterCard.tsx": "Character display card with edit and delete functionality, styled with the character card template background.",
   "frontend/src/components/CharacterForm.tsx": "Form component for creating and editing characters with name, description, traits, and relationships fields.",
-  "frontend/src/contexts/ProjectContext.tsx": "React context provider managing all project data including story text, title, selected images, and flipbook functionality with localStorage persistence for both project and flipbook data.",
+  "frontend/src/contexts/ProjectContext.tsx": "React context provider managing all project data including story text, title, selected images, and flipbook functionality with debounced auto-save to localStorage (500ms delay) to prevent re-render conflicts and flickering during typing.",
   "frontend/src/hooks/useLocalStorage.ts": "Custom hook providing localStorage operations with error handling and TypeScript support.",
   "frontend/src/hooks/useWordCount.ts": "Custom hook that calculates real-time word count from text input.",
   "frontend/src/hooks/usePdfExport.ts": "Custom hook for exporting the novella to PDF using browser's native print functionality with \"Save as PDF\" option, avoiding external dependencies.",
   "frontend/src/hooks/useDictionary.ts": "Custom hook for dictionary API integration to look up word definitions.",
   "frontend/src/hooks/useThesaurus.ts": "Custom hook for thesaurus functionality to find word synonyms.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for backend character operations including get, add, and delete.",
-  "frontend/src/pages/WritingPage.tsx": "Main writing interface with story title input, text editor with 2000 word maximum limit that allows deletion even when at limit, real-time word count display, warning message when limit is reached, and three research tools (dictionary, thesaurus, and Google search) in the sidebar.",
+  "frontend/src/pages/WritingPage.tsx": "Main writing interface with local state management for textarea and title to prevent flickering, real-time word count display, 2000 word maximum limit, autosave functionality every 10 seconds with visual feedback, and three research tools in the sidebar.",
   "frontend/src/pages/AboutPage.tsx": "About page explaining First Edition platform features and purpose for grade 4 students.",
   "frontend/src/pages/WritingPromptsPage.tsx": "Writing prompts page displaying categorized story starters for inspiration.",
   "frontend/src/pages/CharacterDevelopmentPage.tsx": "Character management page with create, edit, delete functionality and character list display.",
@@ -27,7 +27,9 @@
   "frontend/src/index.css": "Global styles with story-themed OKLCH color system for light and dark modes, custom font utilities for playful and readable typography.",
   "frontend/tailwind.config.js": "Tailwind configuration with story-themed design tokens and custom utilities.",
   "frontend/src/components/FlipbookViewer.tsx": "Interactive flipbook viewer component with page-turning animations, keyboard navigation, and book-like layout displaying story text and illustrations.",
-  "frontend/src/pages/FlipbookPage.tsx": "Flipbook page that retrieves saved flipbook data from localStorage and renders it using FlipbookViewer, with fallback message when no flipbook exists.",
+  "frontend/src/pages/FlipbookPage.tsx": "Flipbook page that displays saved flipbook with FlipbookViewer and includes an \"Edit My Story\" button that navigates back to the WritingPage for continued editing.",
   "frontend/src/components/SaveFlipbookButton.tsx": "Button component that saves the current novella as a flipbook with validation, loading state, success notification, and automatic navigation to the flipbook viewer.",
-  "frontend/src/components/GoogleSearchTool.tsx": "Google search component that allows students to search Google directly from the writing interface, opening results in a new tab with a grade 4-appropriate interface."
+  "frontend/src/components/GoogleSearchTool.tsx": "Google research tool that displays simulated search results inline within the component, showing contextual example results based on search queries to inspire student research without leaving the page.",
+  "frontend/src/hooks/useAutosave.ts": "Custom hook that implements debounced autosave logic, triggering a save callback after user stops typing for a specified delay (default 10 seconds) and returning autosave status for UI feedback.",
+  "frontend/src/components/AutosaveIndicator.tsx": "Component that displays autosave status feedback with animated icons and text, showing \"Saving...\" or \"Saved ✓\" messages that fade out after 3 seconds."
 }

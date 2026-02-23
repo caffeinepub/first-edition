@@ -1,7 +1,7 @@
 import { useProject } from '../contexts/ProjectContext';
 import FlipbookViewer from '../components/FlipbookViewer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from '@tanstack/react-router';
 
@@ -33,7 +33,15 @@ export default function FlipbookPage() {
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 space-y-4">
+      <div className="flex justify-center pt-4">
+        <Link to="/">
+          <Button variant="outline" size="lg" className="gap-2">
+            <Edit className="w-4 h-4" />
+            Edit My Story
+          </Button>
+        </Link>
+      </div>
       <FlipbookViewer flipbook={flipbook} />
     </div>
   );

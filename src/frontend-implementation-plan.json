@@ -1,49 +1,49 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add Google research area to writing tab and investigate 9-word limit bug",
+  "title": "Implement autosave functionality for story text every 10 seconds",
   "requirements": [
     {
-      "id": "REQ-21",
-      "summary": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface",
+      "id": "REQ-30",
+      "summary": "Implement automatic saving of story text to localStorage every 10 seconds while typing",
       "acceptanceCriteria": [
-        "A Google research section is visible on the WritingPage",
-        "Students can enter search queries and view results or be redirected to Google search",
-        "The research area integrates seamlessly with the existing sidebar layout alongside dictionary and thesaurus tools",
-        "The interface is age-appropriate for grade 4 students"
+        "Story text is automatically saved to localStorage every 10 seconds when user is actively typing",
+        "Autosave timer resets when user types, preventing premature saves during active typing",
+        "Autosave functionality works independently of the manual save button",
+        "User can continue typing without interruption during autosave operations",
+        "Autosaved data persists across page refreshes and browser sessions"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/GoogleSearchTool.tsx",
+          "path": "frontend/src/hooks/useAutosave.ts",
           "operation": "create",
-          "description": "Create a Google search component with a search input field and a button that opens search results in a new tab using Google's search URL. Style it consistently with DictionaryTool and ThesaurusTool components using Card, Input, and Button from shadcn/ui. Include appropriate labels and placeholders for grade 4 students."
+          "description": "Create a custom hook that implements debounced autosave logic using useEffect. The hook accepts a callback function, data to save, and a delay (10000ms). It uses a debounce pattern where the timer resets on each data change, only triggering the save callback after the user stops typing for 10 seconds. Returns the autosave status ('idle', 'saving', 'saved') for UI feedback."
         },
         {
           "path": "frontend/src/pages/WritingPage.tsx",
           "operation": "modify",
-          "description": "Import and integrate the GoogleSearchTool component into the existing sidebar layout alongside DictionaryTool and ThesaurusTool. Position it within the same scrollable area to maintain the current visual hierarchy and ensure the sidebar accommodates all three research tools without layout issues."
+          "description": "Integrate the useAutosave hook to automatically save storyText changes. Import and call useAutosave with the ProjectContext's saveProject method, the current storyText value, and 10000ms delay. Store the returned autosave status in local state to pass to the autosave indicator component. Ensure the autosave logic respects the existing local state management that prevents textarea flickering and does not interfere with manual save operations."
         }
       ]
     },
     {
-      "id": "REQ-22",
-      "summary": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum",
+      "id": "REQ-31",
+      "summary": "Add visual feedback to inform users when story text has been automatically saved",
       "acceptanceCriteria": [
-        "The live production version of WritingPage enforces a 2000-word maximum limit",
-        "Users can type up to 2000 words without being prevented from entering more text",
-        "The word count display shows 'X / 2000' format correctly",
-        "The 9-word limit bug is completely resolved in production"
+        "User sees a subtle indicator (e.g., 'Saved' text or icon) when autosave completes",
+        "Feedback appears briefly and does not obstruct the writing interface",
+        "Feedback is clear enough for grade 4 students to understand"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/WritingPage.tsx",
-          "operation": "modify",
-          "description": "Review the textarea's maxLength attribute, onChange handler, and any conditional logic that might prevent text input beyond 9 words. Ensure the textarea is not using a hardcoded character limit or incorrectly applying the word count. Verify that the word count validation logic allows input up to 2000 words and only shows a warning or disables further input after that threshold. Remove any erroneous constraints that might be causing the 9-word limitation."
+          "path": "frontend/src/components/AutosaveIndicator.tsx",
+          "operation": "create",
+          "description": "Create a component that displays autosave status feedback. Accept a 'status' prop ('idle' | 'saving' | 'saved'). When status is 'saved', display a small, non-intrusive text indicator like 'Saved ✓' with a subtle fade-in animation. The indicator should automatically fade out after 2-3 seconds. Use simple, grade-4-friendly language. Style it to appear in a fixed position (e.g., near the word count) without obstructing the textarea. Use Tailwind CSS for styling with appropriate text colors from the theme."
         },
         {
-          "path": "frontend/src/hooks/useWordCount.ts",
+          "path": "frontend/src/pages/WritingPage.tsx",
           "operation": "modify",
-          "description": "Review the word counting implementation to ensure it correctly splits text on whitespace and counts words accurately. Verify there are no off-by-one errors, hardcoded limits, or logic that would cause premature truncation at 9 words. Ensure the hook returns the correct word count for validation in WritingPage."
+          "description": "Add the AutosaveIndicator component to the WritingPage layout. Position it near the word count display or in the header area where it's visible but not intrusive. Pass the autosave status from the useAutosave hook as a prop to the indicator component. Ensure the indicator placement works well with the existing sidebar tools and does not cause layout shifts."
         }
       ]
     }

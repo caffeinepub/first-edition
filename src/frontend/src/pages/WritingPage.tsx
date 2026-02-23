@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { useProject } from '../contexts/ProjectContext';
 import { useWordCount } from '../hooks/useWordCount';
+import { useAutosave } from '../hooks/useAutosave';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -7,12 +9,35 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DictionaryTool from '../components/DictionaryTool';
 import ThesaurusTool from '../components/ThesaurusTool';
 import GoogleSearchTool from '../components/GoogleSearchTool';
+import AutosaveIndicator from '../components/AutosaveIndicator';
 
 const MAX_WORD_COUNT = 2000;
 
 export default function WritingPage() {
-  const { project, updateStoryText, updateTitle } = useProject();
-  const wordCount = useWordCount(project.storyText);
+  const { project, updateStoryText, updateTitle, saveProject } = useProject();
+  
+  // Local state for textarea to prevent flickering
+  const [localStoryText, setLocalStoryText] = useState(project.storyText);
+  const [localTitle, setLocalTitle] = useState(project.title);
+  
+  // Word count based on local state for real-time updates
+  const wordCount = useWordCount(localStoryText);
+
+  // Autosave status for visual feedback
+  const autosaveStatus = useAutosave(localStoryText, {
+    delay: 10000, // 10 seconds
+    onSave: saveProject,
+  });
+
+  // Sync local state with context when context changes from external sources
+  // (e.g., when loading from localStorage or flipbook)
+  useEffect(() => {
+    setLocalStoryText(project.storyText);
+  }, [project.storyText]);
+
+  useEffect(() => {
+    setLocalTitle(project.title);
+  }, [project.title]);
 
   const handleStoryTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -24,9 +49,16 @@ export default function WritingPage() {
     // Allow updates if:
     // 1. We're below the limit, OR
     // 2. We're at/above the limit but the new text is shorter (deleting)
-    if (newWordCount <= MAX_WORD_COUNT || newText.length < project.storyText.length) {
+    if (newWordCount <= MAX_WORD_COUNT || newText.length < localStoryText.length) {
+      setLocalStoryText(newText);
       updateStoryText(newText);
     }
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    setLocalTitle(newTitle);
+    updateTitle(newTitle);
   };
 
   return (
@@ -50,8 +82,8 @@ export default function WritingPage() {
               <Label htmlFor="title">Story Title</Label>
               <Input
                 id="title"
-                value={project.title}
-                onChange={(e) => updateTitle(e.target.value)}
+                value={localTitle}
+                onChange={handleTitleChange}
                 placeholder="My Amazing Adventure"
                 className="text-lg font-semibold"
               />
@@ -60,13 +92,16 @@ export default function WritingPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="story">Your Story</Label>
-                <span className="text-sm text-muted-foreground">
-                  {wordCount} / {MAX_WORD_COUNT} {wordCount === 1 ? 'word' : 'words'}
-                </span>
+                <div className="flex items-center gap-4">
+                  <AutosaveIndicator status={autosaveStatus} />
+                  <span className="text-sm text-muted-foreground">
+                    {wordCount} / {MAX_WORD_COUNT} {wordCount === 1 ? 'word' : 'words'}
+                  </span>
+                </div>
               </div>
               <Textarea
                 id="story"
-                value={project.storyText}
+                value={localStoryText}
                 onChange={handleStoryTextChange}
                 placeholder="Once upon a time..."
                 className="min-h-[500px] text-base leading-relaxed font-writing"

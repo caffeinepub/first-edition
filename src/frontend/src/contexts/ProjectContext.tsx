@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export interface ProjectImage {
@@ -53,7 +53,10 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   const { getItem, setItem } = useLocalStorage();
   const [project, setProject] = useState<ProjectData>(defaultProject);
   const [hasFlipbook, setHasFlipbook] = useState(false);
+  const isInitialMount = useRef(true);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Load saved project and flipbook data on mount
   useEffect(() => {
     const saved = getItem<ProjectData>('first-edition-project');
     if (saved) {
@@ -62,7 +65,35 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
     
     const flipbook = getItem<FlipbookData>('first-edition-flipbook');
     setHasFlipbook(!!flipbook);
+    
+    isInitialMount.current = false;
   }, [getItem]);
+
+  // Auto-save project data with debounce to prevent excessive writes
+  useEffect(() => {
+    // Skip the initial mount
+    if (isInitialMount.current) {
+      return;
+    }
+
+    // Clear existing timeout
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    // Debounce auto-save by 500ms
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      if (project.storyText || project.title !== defaultProject.title) {
+        setItem('first-edition-project', project);
+      }
+    }, 500);
+
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [project, setItem]);
 
   const updateStoryText = (text: string) => {
     setProject((prev) => ({ ...prev, storyText: text }));
@@ -98,6 +129,11 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
   };
 
   const saveFlipbook = () => {
+    // First, save the current project state immediately
+    const updatedProject = { ...project, lastSaved: Date.now() };
+    setProject(updatedProject);
+    setItem('first-edition-project', updatedProject);
+
     // Split story text into pages (approximately 300 words per page)
     const words = project.storyText.split(/\s+/).filter(word => word.length > 0);
     const wordsPerPage = 300;
