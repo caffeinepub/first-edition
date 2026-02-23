@@ -2,8 +2,27 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-maximum-word-count-limit-of-2000-words-to-the-main-writing-textarea-on-the-writingpage-preventing-users-from-typing-beyond-this-limit-and-displaying-the-count-as-x-2000-format",
-      "featureTitle": "Add a maximum word count limit of 2000 words to the main writing textarea on the WritingPage, preventing users from typing beyond this limit and displaying the count as 'X / 2000' format",
+      "featureId": "feature-add-a-google-research-area-component-to-the-writingpage-that-allows-students-to-search-google-directly-from-the-writing-interface-without-leaving-the-page",
+      "featureTitle": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface without leaving the page",
+      "files": [
+        "frontend/src/components/GoogleSearchTool.tsx",
+        "frontend/src/pages/WritingPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-21"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-investigate-and-fix-the-production-deployment-issue-causing-the-writingpage-textarea-to-enforce-a-9-word-limit-instead-of-the-intended-2000-word-maximum-limit",
+      "featureTitle": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum limit",
       "files": [
         "frontend/src/pages/WritingPage.tsx"
       ],
@@ -15,7 +34,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-18"
+        "REQ-22"
       ],
       "confidence": "high"
     }

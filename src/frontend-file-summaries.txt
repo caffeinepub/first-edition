@@ -16,7 +16,7 @@
   "frontend/src/hooks/useDictionary.ts": "Custom hook for dictionary API integration to look up word definitions.",
   "frontend/src/hooks/useThesaurus.ts": "Custom hook for thesaurus functionality to find word synonyms.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks for backend character operations including get, add, and delete.",
-  "frontend/src/pages/WritingPage.tsx": "Main writing interface with story title input, text editor with 2000 word maximum limit enforcement, real-time word count display showing \"X / 2000\" format, and dictionary and thesaurus tools displayed side-by-side in a responsive grid layout.",
+  "frontend/src/pages/WritingPage.tsx": "Main writing interface with story title input, text editor with 2000 word maximum limit that allows deletion even when at limit, real-time word count display, warning message when limit is reached, and three research tools (dictionary, thesaurus, and Google search) in the sidebar.",
   "frontend/src/pages/AboutPage.tsx": "About page explaining First Edition platform features and purpose for grade 4 students.",
   "frontend/src/pages/WritingPromptsPage.tsx": "Writing prompts page displaying categorized story starters for inspiration.",
   "frontend/src/pages/CharacterDevelopmentPage.tsx": "Character management page with create, edit, delete functionality and character list display.",
@@ -28,5 +28,6 @@
   "frontend/tailwind.config.js": "Tailwind configuration with story-themed design tokens and custom utilities.",
   "frontend/src/components/FlipbookViewer.tsx": "Interactive flipbook viewer component with page-turning animations, keyboard navigation, and book-like layout displaying story text and illustrations.",
   "frontend/src/pages/FlipbookPage.tsx": "Flipbook page that retrieves saved flipbook data from localStorage and renders it using FlipbookViewer, with fallback message when no flipbook exists.",
-  "frontend/src/components/SaveFlipbookButton.tsx": "Button component that saves the current novella as a flipbook with validation, loading state, success notification, and automatic navigation to the flipbook viewer."
+  "frontend/src/components/SaveFlipbookButton.tsx": "Button component that saves the current novella as a flipbook with validation, loading state, success notification, and automatic navigation to the flipbook viewer.",
+  "frontend/src/components/GoogleSearchTool.tsx": "Google search component that allows students to search Google directly from the writing interface, opening results in a new tab with a grade 4-appropriate interface."
 }

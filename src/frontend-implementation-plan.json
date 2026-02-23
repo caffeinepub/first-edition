@@ -1,23 +1,49 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Set maximum word count to 2000 words",
+  "title": "Add Google research area to writing tab and investigate 9-word limit bug",
   "requirements": [
     {
-      "id": "REQ-18",
-      "summary": "Add a 2000 word maximum limit to the WritingPage textarea with real-time count display showing 'X / 2000' format",
+      "id": "REQ-21",
+      "summary": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface",
       "acceptanceCriteria": [
-        "The textarea on WritingPage enforces a 2000 word maximum",
-        "Users cannot type or paste text that would exceed 2000 words",
-        "The word count display shows current count out of 2000 (e.g., '1543 / 2000')",
-        "When the limit is reached, further typing is blocked",
-        "The word count indicator remains visible and updates in real-time as the user types"
+        "A Google research section is visible on the WritingPage",
+        "Students can enter search queries and view results or be redirected to Google search",
+        "The research area integrates seamlessly with the existing sidebar layout alongside dictionary and thesaurus tools",
+        "The interface is age-appropriate for grade 4 students"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/GoogleSearchTool.tsx",
+          "operation": "create",
+          "description": "Create a Google search component with a search input field and a button that opens search results in a new tab using Google's search URL. Style it consistently with DictionaryTool and ThesaurusTool components using Card, Input, and Button from shadcn/ui. Include appropriate labels and placeholders for grade 4 students."
+        },
+        {
+          "path": "frontend/src/pages/WritingPage.tsx",
+          "operation": "modify",
+          "description": "Import and integrate the GoogleSearchTool component into the existing sidebar layout alongside DictionaryTool and ThesaurusTool. Position it within the same scrollable area to maintain the current visual hierarchy and ensure the sidebar accommodates all three research tools without layout issues."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum",
+      "acceptanceCriteria": [
+        "The live production version of WritingPage enforces a 2000-word maximum limit",
+        "Users can type up to 2000 words without being prevented from entering more text",
+        "The word count display shows 'X / 2000' format correctly",
+        "The 9-word limit bug is completely resolved in production"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/WritingPage.tsx",
           "operation": "modify",
-          "description": "Add word count limit enforcement to the story textarea by implementing an onChange handler that blocks input when word count exceeds 2000 words. Update the word count display element to show the format 'X / 2000' instead of just the current count. Ensure paste events are also validated against the 2000 word maximum."
+          "description": "Review the textarea's maxLength attribute, onChange handler, and any conditional logic that might prevent text input beyond 9 words. Ensure the textarea is not using a hardcoded character limit or incorrectly applying the word count. Verify that the word count validation logic allows input up to 2000 words and only shows a warning or disables further input after that threshold. Remove any erroneous constraints that might be causing the 9-word limitation."
+        },
+        {
+          "path": "frontend/src/hooks/useWordCount.ts",
+          "operation": "modify",
+          "description": "Review the word counting implementation to ensure it correctly splits text on whitespace and counts words accurately. Verify there are no off-by-one errors, hardcoded limits, or logic that would cause premature truncation at 9 words. Ensure the hook returns the correct word count for validation in WritingPage."
         }
       ]
     }

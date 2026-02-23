@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Limit the main writing textarea to a maximum of 2000 words with real-time enforcement and display.
+**Goal:** Add Google research functionality to the writing interface and fix the production 9-word limit bug.
 
 **Planned changes:**
-- Add a 2000-word maximum limit to the WritingPage textarea that prevents further input when reached
-- Update the word count display format to show "X / 2000" instead of just the current count
-- Block typing and pasting when the 2000-word limit is reached
+- Add a Google research area component to the WritingPage where students can search Google directly
+- Integrate the research area into the existing sidebar layout alongside dictionary and thesaurus tools
+- Investigate and resolve the production bug that limits story writing to 9 words instead of 2000 words
+- Ensure the word count display and limit enforcement work correctly in production
 
-**User-visible outcome:** Users will see their word count displayed as a fraction (e.g., "1543 / 2000") and will be prevented from exceeding 2000 words in their story text.
+**User-visible outcome:** Students can research topics using Google without leaving the writing page, and can write stories up to the full 2000-word limit without being blocked after 9 words.

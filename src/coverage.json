@@ -1,21 +1,35 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-23T08:29:33.461Z",
+  "generatedAt": "2026-02-23T09:30:07.542Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
-        "id": "REQ-18",
-        "summary": "Add a maximum word count limit of 2000 words to the main writing textarea on the WritingPage, preventing users from typing beyond this limit and displaying the count as 'X / 2000' format",
+        "id": "REQ-21",
+        "summary": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface without leaving the page",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/components/GoogleSearchTool.tsx",
           "frontend/src/pages/WritingPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/GoogleSearchTool.tsx",
+          "frontend/src/pages/WritingPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-22",
+        "summary": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum limit",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/WritingPage.tsx",
+          "frontend/src/hooks/useWordCount.ts"
         ],
         "matchedFiles": [
           "frontend/src/pages/WritingPage.tsx"
@@ -28,6 +42,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/components/GoogleSearchTool.tsx",
     "frontend/src/pages/WritingPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",

@@ -1,39 +1,59 @@
 {
   "kind": "build_request",
-  "title": "Set maximum word count to 2000 words",
+  "title": "Add Google research area to writing tab and investigate 9-word limit bug",
   "projectName": "First Edition",
-  "priority": "normal",
+  "priority": "high",
   "requirements": [
     {
-      "id": "REQ-18",
-      "text": "Add a maximum word count limit of 2000 words to the main writing textarea on the WritingPage, preventing users from typing beyond this limit and displaying the count as 'X / 2000' format",
+      "id": "REQ-21",
+      "text": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface without leaving the page",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-user-latest"
         ],
         "quotes": [
-          "keep the maximum word count as 2000"
+          "add a google research area in the write your story tab"
         ]
       },
       "acceptanceCriteria": [
-        "The textarea on WritingPage enforces a 2000 word maximum",
-        "Users cannot type or paste text that would exceed 2000 words",
-        "The word count display shows current count out of 2000 (e.g., '1543 / 2000')",
-        "When the limit is reached, further typing is blocked",
-        "The word count indicator remains visible and updates in real-time as the user types"
+        "A Google research section is visible on the WritingPage",
+        "Students can enter search queries and view results or be redirected to Google search",
+        "The research area integrates seamlessly with the existing sidebar layout alongside dictionary and thesaurus tools",
+        "The interface is age-appropriate for grade 4 students"
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "text": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum limit",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-latest"
+        ],
+        "quotes": [
+          "check why the live version is not letting me write more than 9 word"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The live production version of WritingPage enforces a 2000-word maximum limit",
+        "Users can type up to 2000 words without being prevented from entering more text",
+        "The word count display shows 'X / 2000' format correctly",
+        "The 9-word limit bug is completely resolved in production"
       ]
     }
   ],
   "constraints": [
-    "Do not change the existing word count calculation logic in useWordCount hook",
-    "Preserve the current visual styling and layout of the WritingPage",
-    "Maintain compatibility with existing save/load functionality"
+    "Do not modify backend/main.mo unless absolutely necessary",
+    "Preserve existing word count tracking logic in useWordCount hook",
+    "Maintain the existing sidebar layout and tool positioning on WritingPage",
+    "Keep the story-themed visual style consistent with grade 4 student audience"
   ],
   "nonGoals": [
-    "Changing word count limits for other text fields (character descriptions, etc.)",
-    "Adding warning messages or alerts about approaching the limit",
-    "Modifying the PDF export or flipbook generation logic"
+    "Implementing a full embedded browser within the application",
+    "Adding authentication or API integration with Google services",
+    "Modifying the character development, grammar check, or other unrelated pages",
+    "Changing the existing dictionary or thesaurus functionality"
   ],
   "imageRequirements": {
     "required": [],

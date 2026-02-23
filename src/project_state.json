@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 7,
+  "projectStateVersion": 13,
   "summary": "First Edition: A novella writing website for grade 4 students with story-themed design, featuring multiple tabs (About, Writing Prompts, Image Creation, Character Development, Preview, Grammar Check, Writer's Block), word count, dark mode, save/load progress, PDF export, dictionary, thesaurus, and AI-powered writing suggestions",
   "architectural_notes": [
     "Target audience: Grade 4 students (ages 9-10)",
@@ -10,9 +10,11 @@
     "Maximum word count limit: 2000 words"
   ],
   "known_issues": [
-    "Email submission not available on current plan - using local save/PDF download instead"
+    "Email submission not available on current plan - using local save/PDF download instead",
+    "Word count limit incorrectly enforcing 9 words instead of 2000 words",
+    "Live version still enforcing 9-word limit despite code fixes (deployment sync issue)"
   ],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
       "id": "feature-create-an-about-page-that-explains-first-edition-is-a-novella-writing-platform-for-grade-4-students-describing-its-features-and-purpose-in-age-appropriate-language",
@@ -157,6 +159,38 @@
         "REQ-18"
       ],
       "version": 1
+    },
+    {
+      "id": "feature-fix-the-writingpage-textarea-word-count-validation-logic-to-correctly-enforce-a-2000-word-maximum-limit-instead-of-the-current-9-word-limit-ensuring-users-can-type-up-to-2000-words-before-being-prevented-from-entering-more-text",
+      "title": "Fix the WritingPage textarea word count validation logic to correctly enforce a 2000-word maximum limit instead of the current 9-word limit, ensuring users can type up to 2000 words before being prevented from entering more text",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-the-writingpage-textarea-word-count-validation-to-correctly-enforce-a-2000-word-maximum-limit-in-the-live-production-application-ensuring-users-can-type-up-to-2000-words-before-being-prevented-from-entering-more-text-currently-limiting-to-9-words",
+      "title": "Fix the WritingPage textarea word count validation to correctly enforce a 2000-word maximum limit in the live production application, ensuring users can type up to 2000 words before being prevented from entering more text (currently limiting to 9 words)",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-google-research-area-component-to-the-writingpage-that-allows-students-to-search-google-directly-from-the-writing-interface-without-leaving-the-page",
+      "title": "Add a Google research area component to the WritingPage that allows students to search Google directly from the writing interface without leaving the page",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-investigate-and-fix-the-production-deployment-issue-causing-the-writingpage-textarea-to-enforce-a-9-word-limit-instead-of-the-intended-2000-word-maximum-limit",
+      "title": "Investigate and fix the production deployment issue causing the WritingPage textarea to enforce a 9-word limit instead of the intended 2000-word maximum limit",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
     }
   ],
   "new_feature_requests": [
@@ -229,6 +263,12 @@
     {
       "id": "AR-12",
       "summary": "Set maximum word count to 2000 words",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add a Google research area in the Write Your Story tab",
       "reqIds": [],
       "status": "pending"
     }

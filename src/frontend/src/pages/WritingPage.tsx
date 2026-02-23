@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import DictionaryTool from '../components/DictionaryTool';
 import ThesaurusTool from '../components/ThesaurusTool';
+import GoogleSearchTool from '../components/GoogleSearchTool';
 
 const MAX_WORD_COUNT = 2000;
 
@@ -15,10 +16,15 @@ export default function WritingPage() {
 
   const handleStoryTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    const newWordCount = newText.trim() ? newText.trim().split(/\s+/).length : 0;
     
-    // Only update if word count is within limit
-    if (newWordCount <= MAX_WORD_COUNT) {
+    // Calculate word count for the new text
+    const trimmedText = newText.trim();
+    const newWordCount = trimmedText ? trimmedText.split(/\s+/).length : 0;
+    
+    // Allow updates if:
+    // 1. We're below the limit, OR
+    // 2. We're at/above the limit but the new text is shorter (deleting)
+    if (newWordCount <= MAX_WORD_COUNT || newText.length < project.storyText.length) {
       updateStoryText(newText);
     }
   };
@@ -65,15 +71,21 @@ export default function WritingPage() {
                 placeholder="Once upon a time..."
                 className="min-h-[500px] text-base leading-relaxed font-writing"
               />
+              {wordCount >= MAX_WORD_COUNT && (
+                <p className="text-sm text-warning">
+                  You've reached the {MAX_WORD_COUNT} word limit. Delete some text to continue writing.
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>
       </div>
 
       <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           <DictionaryTool />
           <ThesaurusTool />
+          <GoogleSearchTool />
         </div>
       </div>
     </div>
